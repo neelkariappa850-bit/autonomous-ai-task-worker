@@ -1,0 +1,6 @@
+fastapi
+uvicorn
+flask
+playwright
+openai
+python-dotenv

@@ -1,0 +1,10 @@
+ACME CORP
+INVOICE
+
+Invoice Number: AC-2026-001
+Invoice Date: 2026-09-28
+
+Amount Due: INR 125000
+Due Date: 2026-10-15
+
+Status: Unpaid

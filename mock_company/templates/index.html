@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Acme Internal Finance Portal</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 40px;
+            background: #f4f6f8;
+        }
+
+        h1 {
+            color: #222;
+        }
+
+        .container {
+            background: white;
+            padding: 25px;
+            border-radius: 10px;
+            max-width: 1000px;
+            margin: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th, td {
+            padding: 12px;
+            border-bottom: 1px solid #ddd;
+            text-align: left;
+        }
+
+        th {
+            background: #eeeeee;
+        }
+
+        .section {
+            margin-top: 35px;
+        }
+
+        input {
+            padding: 10px;
+            width: 250px;
+            margin: 5px;
+        }
+
+        button {
+            padding: 10px 18px;
+            background: #222;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #444;
+        }
+
+        #message {
+            margin-top: 15px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <h1>Acme Internal Finance Portal</h1>
+
+    <p>Internal invoice and payment management system</p>
+
+    <div class="section">
+
+        <h2>Invoices</h2>
+
+        <table id="invoiceTable">
+
+            <thead>
+                <tr>
+                    <th>Company</th>
+                    <th>Invoice Number</th>
+                    <th>Amount</th>
+                    <th>Due Date</th>
+                    <th>Invoice Date</th>
+                </tr>
+            </thead>
+
+            <tbody>
+
+                {% for invoice in invoices %}
+
+                <tr>
+                    <td>{{ invoice.company }}</td>
+                    <td>{{ invoice.invoice_number }}</td>
+                    <td>₹{{ invoice.amount }}</td>
+                    <td>{{ invoice.due_date }}</td>
+                    <td>{{ invoice.date }}</td>
+                </tr>
+
+                {% endfor %}
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+
+    <div class="section">
+
+        <h2>Save Payment</h2>
+
+        <input
+            id="invoice_number"
+            placeholder="Invoice Number"
+        >
+
+        <input
+            id="amount"
+            placeholder="Amount"
+        >
+
+        <input
+            id="due_date"
+            placeholder="Due Date"
+        >
+
+        <br>
+
+        <button onclick="savePayment()">
+            Save Payment
+        </button>
+
+        <div id="message"></div>
+
+    </div>
+
+
+    <div class="section">
+
+        <h2>Saved Payments</h2>
+
+        <table>
+
+            <thead>
+
+                <tr>
+                    <th>Invoice</th>
+                    <th>Amount</th>
+                    <th>Due Date</th>
+                    <th>Status</th>
+                </tr>
+
+            </thead>
+
+            <tbody id="paymentsTable">
+
+                {% for payment in payments %}
+
+                <tr>
+                    <td>{{ payment.invoice_number }}</td>
+                    <td>₹{{ payment.amount }}</td>
+                    <td>{{ payment.due_date }}</td>
+                    <td>{{ payment.status }}</td>
+                </tr>
+
+                {% endfor %}
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</div>
+
+
+<script>
+
+async function savePayment() {
+
+    const invoice_number =
+        document.getElementById("invoice_number").value;
+
+    const amount =
+        document.getElementById("amount").value;
+
+    const due_date =
+        document.getElementById("due_date").value;
+
+
+    const response = await fetch("/api/payments", {
+
+        method: "POST",
+
+        headers: {
+            "Content-Type": "application/json"
+        },
+
+        body: JSON.stringify({
+            invoice_number: invoice_number,
+            amount: amount,
+            due_date: due_date
+        })
+
+    });
+
+
+    const result = await response.json();
+
+
+    if (result.success) {
+
+        document.getElementById("message").innerText =
+            "Payment saved successfully!";
+
+        location.reload();
+
+    } else {
+
+        document.getElementById("message").innerText =
+            "Something went wrong.";
+
+    }
+
+}
+
+</script>
+
+</body>
+</html>
